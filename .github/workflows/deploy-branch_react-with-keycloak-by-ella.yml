@@ -25,7 +25,10 @@ jobs:
           
           # Fetch the latest changes from main
           git fetch origin main:main
-          
+
+          git merge --allow-unrelated-histories <deploy-branch>
+          git rebase main deploy-branch
+
           # Merge the feature branch into main
           git checkout main
           git merge "${GITHUB_REF#refs/heads/}"
