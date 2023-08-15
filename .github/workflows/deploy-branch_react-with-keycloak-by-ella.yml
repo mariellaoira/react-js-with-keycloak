@@ -29,30 +29,8 @@ jobs:
           npm install --save-dev @babel/plugin-proposal-private-property-in-object
           npm run build --if-present
       
-      - name: Upload artifact for deployment job
-        uses: actions/upload-artifact@v2
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
         with:
-          name: node-app
-          path: .
-
-  deploy:
-    runs-on: ubuntu-latest
-    needs: build
-    environment:
-      name: 'Production'
-      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
-
-    steps:
-      - name: Download artifact from build job
-        uses: actions/download-artifact@v2
-        with:
-          name: node-app
-
-      - name: 'Deploy to Azure Web App'
-        uses: azure/webapps-deploy@v2
-        id: deploy-to-webapp
-        with:
-          app-name: 'react-with-keycloak-by-ella'
-          slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_B96929DF498E4F4087B407EEC30AB00F }}
-          package: .
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./build # Change this to your build directory
